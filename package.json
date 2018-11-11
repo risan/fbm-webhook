@@ -1,0 +1,46 @@
+{
+  "name": "fbm-webhook",
+  "description": "Facebook Messenger webhook middleware for Express",
+  "version": "1.0.0-alpha.1",
+  "license": "MIT",
+  "homepage": "https://github.com/risan/fbm-webhook",
+  "author": {
+    "name": "Risan Bagja Pradana",
+    "email": "risanbagja@gmail.com",
+    "url": "https://bagja.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/risan/fbm-webhook.git"
+  },
+  "bugs": {
+    "url": "https://github.com/risan/fbm-webhook/issues"
+  },
+  "keywords": [
+    "facebook",
+    "messenger",
+    "webhook"
+  ],
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "scripts": {
+    "lint": "eslint ./",
+    "lint-fix": "eslint ./ --fix",
+    "test": "jest"
+  },
+  "dependencies": {
+    "express": "4.x",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.2"
+  }
+}
