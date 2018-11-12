@@ -1,5 +1,6 @@
 const express = require("express");
-const getChallenge = require("./get-verification-challenge");
+const get = require("lodash/get");
+const has = require("lodash/has");
 
 /**
  * Get webhook verification middleware.
@@ -11,12 +12,17 @@ const verification = (token = process.env.FB_VERIFY_TOKEN) => {
   const router = express.Router();
 
   router.get("/", (req, res) => {
-    try {
-      const challenge = getChallenge(req, token);
-      res.status(200).send(challenge);
-    } catch (error) {
-      res.status(403).send("Forbidden");
+    const { query } = req;
+
+    if (get(query, ["hub.mode"]) !== "subscribe") {
+      return res.status(422).send("Invalid hub.mode.");
     }
+
+    if (get(query, ["hub.verify_token"]) !== token) {
+      return res.status(403).send("Invalid hub.verify_token.");
+    }
+
+    res.status(200).send(get(query, ["hub.challenge"]));
   });
 
   return router;

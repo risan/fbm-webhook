@@ -1,32 +1,41 @@
 /* global jest:false, test:false, expect:false */
 const express = require("express");
 const request = require("supertest");
-const getChallenge = require("../src/get-verification-challenge");
 const verification = require("../src/verification");
-
-jest.mock("../src/get-verification-challenge");
 
 const app = express();
 
-app.use("/webhook", verification());
+app.use("/", verification("secret"));
 
-test("it responds HTTP 200 with the challenge code if webhook request is valid", async () => {
-  getChallenge.mockReturnValue("accepted");
-
-  const response = await request(app).get("/webhook");
-
-  expect(getChallenge).toHaveBeenCalledTimes(1);
-  expect(response.statusCode).toBe(200);
-  expect(response.text).toBe("accepted");
-});
-
-test("it responds HTTP 403 if webhook request is invalid", async () => {
-  getChallenge.mockImplementation(() => {
-    throw new Error("invalid");
+test("it responds with HTTP 422 if hub.mode is not subscribe", async () => {
+  const response = await request(app).get("/").query({
+    "hub.mode": "foo",
+    "hub.verify_token": "secret",
+    "hub.challenge": "accepted"
   });
 
-  const response = await request(app).get("/webhook");
+  expect(response.statusCode).toBe(422);
+  expect(response.text).toMatch(/invalid/i);
+});
 
-  expect(getChallenge).toHaveBeenCalledTimes(1);
+test("it responds with HTTP 403 if hub.verify_token does not match", async () => {
+  const response = await request(app).get("/").query({
+    "hub.mode": "subscribe",
+    "hub.verify_token": "foo",
+    "hub.challenge": "accepted"
+  });
+
   expect(response.statusCode).toBe(403);
+  expect(response.text).toMatch(/invalid/i);
+});
+
+test("it responds with HTTP 200 and challenge code if webhook verification request is valid", async () => {
+  const response = await request(app).get("/").query({
+    "hub.mode": "subscribe",
+    "hub.verify_token": "secret",
+    "hub.challenge": "accepted"
+  });
+
+  expect(response.statusCode).toBe(200);
+  expect(response.text).toBe("accepted");
 });
