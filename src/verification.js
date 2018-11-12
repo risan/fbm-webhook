@@ -1,6 +1,5 @@
 const express = require("express");
 const get = require("lodash/get");
-const has = require("lodash/has");
 
 /**
  * Get webhook verification middleware.
@@ -22,7 +21,7 @@ const verification = (token = process.env.FB_VERIFY_TOKEN) => {
       return res.status(403).send("Invalid hub.verify_token.");
     }
 
-    res.status(200).send(get(query, ["hub.challenge"]));
+    return res.status(200).send(get(query, ["hub.challenge"]));
   });
 
   return router;
