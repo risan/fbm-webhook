@@ -169,6 +169,8 @@ It returns an [Express application](https://expressjs.com/en/4x/api.html#app) in
 
 ### `fbmWebhook.on`
 
+Listen to a webhook event.
+
 ```js
 fbmWebhook.on(eventType, callback);
 ```
