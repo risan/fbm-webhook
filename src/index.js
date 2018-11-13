@@ -5,7 +5,7 @@ const webhook = require("./webhook");
 const fbmWebhook = ({
   path = "/",
   verifyToken = process.env.FB_VERIFY_TOKEN
-}) => {
+} = {}) => {
   const app = express();
 
   app.use(path, verification(verifyToken));
