@@ -11,19 +11,17 @@ const emitter = {
 
 app.use("/", webhook(emitter));
 
+const sendRequestWithBody = async (body) => request(app).post("/").send(body);
+
 test("it responds with HTTP 422 if object is not page", async () => {
-  const response = await request(app)
-    .post("/")
-    .send({ object: "foo" });
+  const response = await sendRequestWithBody({ object: "foo" });
 
   expect(response.statusCode).toBe(422);
   expect(response.text).toMatch(/invalid/i);
 });
 
 test("it responds with HTTP 200 if object is page", async () => {
-  const response = await request(app)
-    .post("/")
-    .send({ object: "page" });
+  const response = await sendRequestWithBody({ object: "page" });
 
   expect(response.statusCode).toBe(200);
 });
@@ -31,12 +29,10 @@ test("it responds with HTTP 200 if object is page", async () => {
 test("it emits the correct webhook event", async () => {
   const messageEvent = { message: true };
 
-  const response = await request(app)
-    .post("/")
-    .send({
-      object: "page",
-      entry: [{ messaging: [messageEvent] }]
-    });
+  const response = await sendRequestWithBody({
+    object: "page",
+    entry: [{ messaging: [messageEvent] }]
+  });
 
   expect(emitter.emit).toHaveBeenCalledTimes(2);
 
@@ -57,12 +53,10 @@ test("it can emit multiple webhook events", async () => {
   const messageEvent = { message: true };
   const readEvent = { read: true };
 
-  const response = await request(app)
-    .post("/")
-    .send({
-      object: "page",
-      entry: [{ messaging: [messageEvent] }, { messaging: [readEvent] }]
-    });
+  const response = await sendRequestWithBody({
+    object: "page",
+    entry: [{ messaging: [messageEvent] }, { messaging: [readEvent] }]
+  });
 
   expect(emitter.emit).toHaveBeenCalledTimes(4);
 

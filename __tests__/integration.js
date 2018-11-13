@@ -2,31 +2,29 @@
 const request = require("supertest");
 const fbmWebhook = require("../src");
 
-test("it responds with HTTP 200 and challenge code if webhook verification request is valid", async () => {
+const sendVerificationRequest = async (query) => {
   const webhook = fbmWebhook({ verifyToken: "secret" });
 
-  const response = await request(webhook)
-    .get("/")
-    .query({
-      "hub.mode": "subscribe",
-      "hub.verify_token": "secret",
-      "hub.challenge": "accepted"
-    });
+  return request(webhook).get("/").query(query);
+}
+
+test("it responds with HTTP 200 and challenge code if webhook verification request is valid", async () => {
+  const response = await sendVerificationRequest({
+    "hub.mode": "subscribe",
+    "hub.verify_token": "secret",
+    "hub.challenge": "accepted"
+  });
 
   expect(response.statusCode).toBe(200);
   expect(response.text).toBe("accepted");
 });
 
 test("it responds with HTTP 403 if hub.verify_token does not match", async () => {
-  const webhook = fbmWebhook({ verifyToken: "secret" });
-
-  const response = await request(webhook)
-    .get("/")
-    .query({
-      "hub.mode": "subscribe",
-      "hub.verify_token": "foo",
-      "hub.challenge": "accepted"
-    });
+  const response = await sendVerificationRequest({
+    "hub.mode": "subscribe",
+    "hub.verify_token": "foo",
+    "hub.challenge": "accepted"
+  });
 
   expect(response.statusCode).toBe(403);
 });
