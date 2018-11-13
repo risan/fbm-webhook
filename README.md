@@ -127,7 +127,7 @@ webhook.listen(3000, () => console.log("Server is running on port: 3000"));
 
 ## Webhook Events
 
-| Event | Messenger Subscription Field | Documentation |
+| Event Type | Messenger Subscription Field | Documentation |
 | -- | -- | -- |
 | `message` | `messages` | [Message recevied events](https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-received) |
 | `echo` | `message_echoes` | [Message Echo events](https://developers.facebook.com/docs/messenger-platform/webhook-reference/message-echo) |
@@ -149,6 +149,34 @@ webhook.listen(3000, () => console.log("Server is running on port: 3000"));
 | `handover.request-thread-control` | `messaging_handovers` | [Handover Protocol request thread control events](https://developers.facebook.com/docs/messenger-platform/reference/webhook-events/messaging_handovers#request_thread_control) |
 | `unknown` | | Other event types not listed above |
 | `data` | | Listen to all type of events |
+
+## API
+
+### `fbmWebhook`
+
+```js
+fbmWebhook([{ path = "/", verifyToken = process.env.FB_VERIFY_TOKEN }])
+```
+
+#### Parameters
+
+* `path` (optional `String`): The webhook route prefix, default to `/`.
+* `verifyToken` (optional `String`): Your own predefined verify token. Used by Facebook to verify webhook URL, default to `process.env.FB_VERIFY_TOKEN`.
+
+#### Return
+
+It returns an [Express application](https://expressjs.com/en/4x/api.html#app) instance.
+
+### `fbmWebhook.on`
+
+```js
+fbmWebhook.on(eventType, callback);
+```
+
+#### Parameters
+
+* `eventType` (`String`): The [webhook event](#webhook-events) to listen to.
+* `callback` (`Function`): The callback function to call, it will receive the `event` payload sent by the Messenger platform.
 
 ## Related
 
