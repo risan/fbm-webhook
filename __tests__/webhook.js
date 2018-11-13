@@ -1,5 +1,4 @@
 /* global jest:false, test:false, expect:false */
-const Emitter = require("events");
 const express = require("express");
 const request = require("supertest");
 const webhook = require("../src/webhook");
@@ -36,9 +35,7 @@ test("it emits the correct webhook event", async () => {
     .post("/")
     .send({
       object: "page",
-      entry: [
-        { messaging: [messageEvent] }
-      ]
+      entry: [{ messaging: [messageEvent] }]
     });
 
   expect(emitter.emit).toHaveBeenCalledTimes(2);
@@ -64,10 +61,7 @@ test("it can emit multiple webhook events", async () => {
     .post("/")
     .send({
       object: "page",
-      entry: [
-        { messaging: [messageEvent] },
-        { messaging: [readEvent] }
-      ]
+      entry: [{ messaging: [messageEvent] }, { messaging: [readEvent] }]
     });
 
   expect(emitter.emit).toHaveBeenCalledTimes(4);
