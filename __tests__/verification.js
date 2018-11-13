@@ -7,8 +7,10 @@ const app = express();
 
 app.use("/", verification("secret"));
 
-const sendRequestWithQuery = async (query) =>
-  request(app).get("/").query(query);
+const sendRequestWithQuery = async query =>
+  request(app)
+    .get("/")
+    .query(query);
 
 test("it responds with HTTP 422 if hub.mode is not subscribe", async () => {
   const response = await sendRequestWithQuery({

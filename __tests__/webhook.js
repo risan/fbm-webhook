@@ -11,7 +11,10 @@ const emitter = {
 
 app.use("/", webhook(emitter));
 
-const sendRequestWithBody = async (body) => request(app).post("/").send(body);
+const sendRequestWithBody = async body =>
+  request(app)
+    .post("/")
+    .send(body);
 
 test("it responds with HTTP 422 if object is not page", async () => {
   const response = await sendRequestWithBody({ object: "foo" });

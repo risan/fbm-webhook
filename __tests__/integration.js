@@ -2,11 +2,13 @@
 const request = require("supertest");
 const fbmWebhook = require("../src");
 
-const sendVerificationRequest = async (query) => {
+const sendVerificationRequest = async query => {
   const webhook = fbmWebhook({ verifyToken: "secret" });
 
-  return request(webhook).get("/").query(query);
-}
+  return request(webhook)
+    .get("/")
+    .query(query);
+};
 
 test("it responds with HTTP 200 and challenge code if webhook verification request is valid", async () => {
   const response = await sendVerificationRequest({
