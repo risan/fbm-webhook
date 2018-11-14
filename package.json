@@ -1,7 +1,7 @@
 {
   "name": "fbm-webhook",
   "description": "Facebook Messenger webhook middleware for Express",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0",
   "license": "MIT",
   "homepage": "https://github.com/risan/fbm-webhook",
   "author": {
