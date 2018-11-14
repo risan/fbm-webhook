@@ -16,11 +16,11 @@ test("it add verification and webhook middlewares", () => {
   verification.mockReturnValue("verification");
   webhook.mockReturnValue("webhook");
 
-  fbmWebhook({ path: "/webhook", verifyToken: "secret" });
+  fbmWebhook({ path: "/webhook", appSecret: "secret", verifyToken: "mytoken" });
 
   expect(express).toHaveBeenCalledTimes(1);
-  expect(verification).toHaveBeenCalledWith("secret");
-  expect(webhook).toHaveBeenCalledWith(app);
+  expect(verification).toHaveBeenCalledWith("mytoken");
+  expect(webhook).toHaveBeenCalledWith({ appSecret: "secret", emitter: app });
 
   expect(app.use).toHaveBeenCalledTimes(2);
   expect(app.use).toHaveBeenNthCalledWith(1, "/webhook", "verification");

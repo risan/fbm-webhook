@@ -2,6 +2,9 @@
 const express = require("express");
 const request = require("supertest");
 const webhook = require("../src/webhook");
+const sha1 = require("../src/sha1");
+
+jest.mock("../src/sha1");
 
 const app = express();
 
@@ -9,22 +12,32 @@ const emitter = {
   emit: jest.fn()
 };
 
-app.use("/", webhook(emitter));
+app.use("/", webhook({ appSecret: "secret", emitter }));
 
-const sendRequestWithBody = async body =>
-  request(app)
+const sendRequest = async (body, signature = "secret") => {
+  sha1.mockReturnValue("secret");
+
+  return request(app)
     .post("/")
+    .set("x-hub-signature", `sha1=${signature}`)
     .send(body);
+};
+
+test("it responds with HTTP 403 if signature is invalid", async () => {
+  const response = await sendRequest({ object: "page" }, "invalid");
+
+  expect(response.statusCode).toBe(403);
+});
 
 test("it responds with HTTP 422 if object is not page", async () => {
-  const response = await sendRequestWithBody({ object: "foo" });
+  const response = await sendRequest({ object: "foo" });
 
   expect(response.statusCode).toBe(422);
   expect(response.text).toMatch(/invalid/i);
 });
 
 test("it responds with HTTP 200 if object is page", async () => {
-  const response = await sendRequestWithBody({ object: "page" });
+  const response = await sendRequest({ object: "page" });
 
   expect(response.statusCode).toBe(200);
 });
@@ -32,7 +45,7 @@ test("it responds with HTTP 200 if object is page", async () => {
 test("it emits the correct webhook event", async () => {
   const messageEvent = { message: true };
 
-  const response = await sendRequestWithBody({
+  const response = await sendRequest({
     object: "page",
     entry: [{ messaging: [messageEvent] }]
   });
@@ -56,7 +69,7 @@ test("it can emit multiple webhook events", async () => {
   const messageEvent = { message: true };
   const readEvent = { read: true };
 
-  const response = await sendRequestWithBody({
+  const response = await sendRequest({
     object: "page",
     entry: [{ messaging: [messageEvent] }, { messaging: [readEvent] }]
   });

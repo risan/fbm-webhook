@@ -28,9 +28,11 @@ const propertyToEventType = {
  * @return {String}
  */
 const getMatchEventType = event => {
-  for (const prop in propertyToEventType) {
-    if (has(event, prop)) {
-      return propertyToEventType[prop];
+  const props = Object.keys(propertyToEventType);
+
+  for (let i = 0; i < props.length; i += 1) {
+    if (has(event, props[i])) {
+      return propertyToEventType[props[i]];
     }
   }
 

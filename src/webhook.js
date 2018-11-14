@@ -3,17 +3,23 @@ const bodyParser = require("body-parser");
 const get = require("lodash/get");
 
 const getEventType = require("./get-event-type");
+const verifySignature = require("./verify-signature");
 
 /**
  * Get webhook middleware.
  *
- * @param {EventEmitter} emitter
+ * @param {String} options.appSecret
+ * @param {EventEmitter} options.emitter }
  * @return {Router}
  */
-const webhook = emitter => {
+const webhook = ({ appSecret = process.env.FB_APP_SECRET, emitter } = {}) => {
   const router = express.Router();
 
-  router.use(bodyParser.json());
+  if (appSecret) {
+    router.use(bodyParser.json({ verify: verifySignature(appSecret) }));
+  } else {
+    router.use(bodyParser.json());
+  }
 
   const emit = (event, ...args) =>
     emitter ? emitter.emit(event, ...args) : null;
