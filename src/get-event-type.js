@@ -1,6 +1,42 @@
 const get = require("lodash/get");
 const has = require("lodash/has");
 
+const propertyToEventType = {
+  message: "message",
+  account_linking: "account-linking",
+  checkout_update: "checkout-update",
+  delivery: "delivered",
+  game_play: "game-play",
+  optin: "optin",
+  payment: "payment",
+  "policy-enforcement": "policy-enforcement",
+  postback: "postback",
+  pre_checkout: "pre-checkout",
+  read: "read",
+  referral: "referral",
+  standby: "standby",
+  app_roles: "handover.app-roles",
+  pass_thread_control: "handover.pass-thread-control",
+  take_thread_control: "handover.take-thread-control",
+  request_thread_control: "handover.request-thread-control"
+};
+
+/**
+ * Get match event type.
+ *
+ * @param {Object} event
+ * @return {String}
+ */
+const getMatchEventType = event => {
+  for (const prop in propertyToEventType) {
+    if (has(event, prop)) {
+      return propertyToEventType[prop];
+    }
+  }
+
+  return "unknown";
+};
+
 /**
  * Get event type.
  *
@@ -8,42 +44,10 @@ const has = require("lodash/has");
  * @return {String}
  */
 const getEventType = event => {
-  let type = "unknown";
+  let type = getMatchEventType(event);
 
-  if (has(event, "message")) {
-    type = get(event, "message.is_echo") ? "echo" : "message";
-  } else if (has(event, "account_linking")) {
-    type = "account-linking";
-  } else if (has(event, "checkout_update")) {
-    type = "checkout-update";
-  } else if (has(event, "delivery")) {
-    type = "delivered";
-  } else if (has(event, "game_play")) {
-    type = "game-play";
-  } else if (has(event, "optin")) {
-    type = "optin";
-  } else if (has(event, "payment")) {
-    type = "payment";
-  } else if (has(event, "policy-enforcement")) {
-    type = "policy-enforcement";
-  } else if (has(event, "postback")) {
-    type = "postback";
-  } else if (has(event, "pre_checkout")) {
-    type = "pre-checkout";
-  } else if (has(event, "read")) {
-    type = "read";
-  } else if (has(event, "referral")) {
-    type = "referral";
-  } else if (has(event, "standby")) {
-    type = "standby";
-  } else if (has(event, "app_roles")) {
-    type = "handover.app-roles";
-  } else if (has(event, "pass_thread_control")) {
-    type = "handover.pass-thread-control";
-  } else if (has(event, "take_thread_control")) {
-    type = "handover.take-thread-control";
-  } else if (has(event, "request_thread_control")) {
-    type = "handover.request-thread-control";
+  if (get(event, "message.is_echo")) {
+    type = "echo";
   }
 
   return type;
