@@ -28,7 +28,10 @@ const express = require("express");
 const fbmWebhook = require("fbm-webhook");
 
 const app = express();
-const webhook = fbmWebhook({ verifyToken: "secret" });
+const webhook = fbmWebhook({
+  appSecret: "Your Facebook App Secret",
+  verifyToken: "Your Predefined Verify Token"
+});
 
 app.use("/webhook", webhook);
 
@@ -44,7 +47,7 @@ webhook.on("read", event => console.log(event));
 app.listen(3000, () => console.log("Server is running on port: 3000"));
 ```
 
-`fbm-webhook` will register two endpoints:
+The `fbm-webhook` middleware will register two endpoints:
 
 * `GET /webhook`: For webhook URL verification.
 * `POST /webhook`: The actual webhook that will receive events data from the Facebook Messenger.
@@ -55,6 +58,33 @@ Check all supported [webhook events](#webhook-events).
 
 ## Recipe
 
+### Store App Secret and Verify Token as Environment Variables
+
+By default, `fbm-webhook` will look for `FB_APP_SECRET` and `FB_VERIFY_TOKEN` on the environment variables. If you set these environment variable, you don't have to pass anything:
+
+```js
+const fbmWebhook = require("fbm-webhook");
+
+const webhook = fbmWebhook();
+
+// Is equal to
+const webhook = fbmWebhook({
+  appSecret = process.env.FB_APP_SECRET,
+  verifyToken = process.env.FB_VERIFY_TOKEN
+});
+```
+
+And if you use another name:
+
+```js
+const fbmWebhook = require("fbm-webhook");
+
+const webhook = fbmWebhook({
+  appSecret = process.env.MY_APP_SECRET,
+  verifyToken: process.env.MY_VERIFY_TOKEN
+});
+```
+
 ### Use Different Endpoints
 
 ```js
@@ -62,7 +92,7 @@ const express = require("express");
 const fbmWebhook = require("fbm-webhook");
 
 const app = express();
-const webhook = fbmWebhook({ verifyToken: "secret" });
+const webhook = fbmWebhook();
 
 app.use("/foobar", webhook);
 ```
@@ -72,24 +102,6 @@ Your webhook endpoints will be:
 * `GET /foobar`: For webhook verification.
 * `POST /foobar`: The actual webhook handler.
 
-### Store Verify Token as an Environment Variable
-
-By default, fbm-webhook will look for `FB_VERIFY_TOKEN` on the environment variables. If you set this environment variable, you don't have to pass anything:
-
-```js
-const fbmWebhook = require("fbm-webhook");
-
-const webhook = fbmWebhook();
-```
-
-And if you use another name:
-
-```js
-const fbmWebhook = require("fbm-webhook");
-
-const webhook = fbmWebhook({ verifyToken: process.env.MY_VERIFY_TOKEN });
-```
-
 ### Listen to All Types of Event
 
 ```js
@@ -97,7 +109,7 @@ const express = require("express");
 const fbmWebhook = require("fbm-webhook");
 
 const app = express();
-const webhook = fbmWebhook({ verifyToken: "secret" });
+const webhook = fbmWebhook();
 
 app.use("/webhook", webhook);
 
@@ -107,14 +119,24 @@ webhook.on("data", event => console.log(event));
 app.listen(3000, () => console.log("Server is running on port: 3000"));
 ```
 
-### `fbm-webhook` as an Express Application
+### Disable Request Signature Verification
+
+By default, `fbm-webhook` will look for the `X-Hub-Signature` header on all incoming webhook. It will verify this request signature using your `appSecret`. You can disable this verification process by passing a false value to `appSecret` (it's not recommended though).
+
+```js
+const fbmWebhook = require("fbm-webhook");
+
+const webhook = fbmWebhook({ appSecret: false });
+```
+
+### Run as Standalone Express Application
 
 You can instantiate `fbm-webhook` as an Express application too:
 
 ```js
 const fbmWebhook = require("fbm-webhook");
 
-const webhook = fbmWebhook({ path: "/webhook", verifyToken: "secret" });
+const webhook = fbmWebhook({ path: "/webhook" });
 
 // Listen to the message received event.
 webhook.on("message", event => {
@@ -155,12 +177,17 @@ webhook.listen(3000, () => console.log("Server is running on port: 3000"));
 ### `fbmWebhook`
 
 ```js
-fbmWebhook([{ path = "/", verifyToken = process.env.FB_VERIFY_TOKEN }])
+fbmWebhook([{
+  path = "/",
+  appSecret = process.env.FB_APP_SECRET,
+  verifyToken = process.env.FB_VERIFY_TOKEN
+}])
 ```
 
 #### Parameters
 
 * `path` (optional `String`): The webhook route prefix, default to `/`.
+* `appSecret` (optional `String`): Your Facebook App Secret, default to `process.env.FB_APP_SECRET`.
 * `verifyToken` (optional `String`): Your own predefined verify token. Used by Facebook to verify webhook URL, default to `process.env.FB_VERIFY_TOKEN`.
 
 #### Return
