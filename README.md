@@ -209,7 +209,7 @@ fbmWebhook.on(eventType, callback);
 
 ## Related
 
-* [messenger-client](https://github.com/risan/messenger-client): Module for sending message through Facebook Messenger Send API.
+* [fbm-send](https://github.com/risan/fbm-send): Module for sending message through Facebook Messenger Send API.
 
 ## License
 
