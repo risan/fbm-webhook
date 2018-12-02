@@ -1,33 +1,31 @@
 {
   "name": "fbm-webhook",
+  "version": "1.0.3",
   "description": "Facebook Messenger webhook middleware for Express",
-  "version": "1.0.2",
-  "license": "MIT",
-  "homepage": "https://github.com/risan/fbm-webhook",
-  "author": {
-    "name": "Risan Bagja Pradana",
-    "email": "risanbagja@gmail.com",
-    "url": "https://bagja.net"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/risan/fbm-webhook.git"
-  },
-  "bugs": {
-    "url": "https://github.com/risan/fbm-webhook/issues"
-  },
   "keywords": [
     "facebook",
     "messenger",
     "webhook"
   ],
+  "homepage": "https://github.com/risan/fbm-webhook",
+  "bugs": {
+    "url": "https://github.com/risan/fbm-webhook/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Risan Bagja Pradana",
+    "email": "risanbagja@gmail.com",
+    "url": "https://bagja.net"
+  },
   "main": "src/index.js",
-  "engines": {
-    "node": ">=8.0.0"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/risan/fbm-webhook.git"
   },
   "scripts": {
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
+    "prepublishOnly": "npm run lint && npm run test",
     "test": "jest"
   },
   "dependencies": {
@@ -44,5 +42,8 @@
     "jest": "^23.6.0",
     "prettier": "^1.15.2",
     "supertest": "^3.3.0"
+  },
+  "engines": {
+    "node": ">=8.0.0"
   }
 }
