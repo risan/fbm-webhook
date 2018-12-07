@@ -1,7 +1,7 @@
 {
   "name": "fbm-webhook",
-  "version": "1.0.3",
-  "description": "Facebook Messenger webhook middleware for Express",
+  "version": "1.0.4",
+  "description": "Facebook Messenger webhook middleware for Express.",
   "keywords": [
     "facebook",
     "messenger",
@@ -31,7 +31,8 @@
   "dependencies": {
     "body-parser": "1.x",
     "express": "4.x",
-    "lodash": "4.x"
+    "lodash.get": "4.x",
+    "lodash.has": "4.x"
   },
   "devDependencies": {
     "eslint": "^5.9.0",

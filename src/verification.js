@@ -1,5 +1,5 @@
 const express = require("express");
-const get = require("lodash/get");
+const get = require("lodash.get");
 
 /**
  * Get webhook verification middleware.

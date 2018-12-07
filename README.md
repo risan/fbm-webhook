@@ -1,12 +1,9 @@
 # Facebook Messenger Webhook
 
-[![Build Status](https://flat.badgen.net/travis/risan/fbm-webhook)](https://travis-ci.org/risan/fbm-webhook)
-[![Test Coverage](https://flat.badgen.net/codeclimate/coverage/risan/fbm-webhook)](https://codeclimate.com/github/risan/fbm-webhook)
-[![Maintainability](https://flat.badgen.net/codeclimate/maintainability/risan/fbm-webhook)](https://codeclimate.com/github/risan/fbm-webhook)
-[![Latest Stable Version](https://flat.badgen.net/npm/v/fbm-webhook)](https://www.npmjs.com/package/fbm-webhook)
-[![Node Version](https://flat.badgen.net/npm/node/fbm-webhook)](https://www.npmjs.com/package/fbm-webhook)
-[![Code Style: Prettier](https://flat.badgen.net/badge/code%20style/prettier/ff69b4)](https://github.com/prettier/prettier)
-[![License](https://flat.badgen.net/npm/license/fbm-webhook)](https://github.com/risan/fbm-webhook/blob/master/LICENSE)
+[![Build Status](https://badgen.net/travis/risan/fbm-webhook)](https://travis-ci.org/risan/fbm-webhook)
+[![Test Covarage](https://badgen.net/codecov/c/github/risan/fbm-webhook)](https://codecov.io/gh/risan/fbm-webhook)
+[![Greenkeeper](https://badges.greenkeeper.io/risan/fbm-webhook.svg)](https://greenkeeper.io)
+[![Latest Version](https://badgen.net/npm/v/fbm-webhook)](https://www.npmjs.com/package/fbm-webhook)
 
 Facebook Messenger webhook middleware for Express.
 
@@ -14,12 +11,9 @@ Facebook Messenger webhook middleware for Express.
 
 ```bash
 $ npm install fbm-webhook
-
-# Or if you use Yarn
-$ yarn add fbm-webhook
 ```
 
-## Quick Start
+## Usage
 
 Add `fbm-webhook` middleware into your existing Express app:
 
@@ -56,7 +50,7 @@ The `verifyToken` is your own predefined secret. It's the one that will be used 
 
 Check all supported [webhook events](#webhook-events).
 
-## Recipe
+## Recipes
 
 ### Store App Secret and Verify Token as Environment Variables
 
@@ -213,7 +207,7 @@ fbmWebhook.on(eventType, callback);
 
 ## License
 
-MIT © [Risan Bagja Pradana](https://bagja.net)
+[MIT](https://github.com/risan/fbm-webhook/blob/master/LICENSE) © [Risan Bagja Pradana](https://bagja.net)
 
 ## Legal
 

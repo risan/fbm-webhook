@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const get = require("lodash/get");
+const get = require("lodash.get");
 
 const getEventType = require("./get-event-type");
 const verifySignature = require("./verify-signature");

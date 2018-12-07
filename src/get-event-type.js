@@ -1,5 +1,5 @@
-const get = require("lodash/get");
-const has = require("lodash/has");
+const get = require("lodash.get");
+const has = require("lodash.has");
 
 const propertyToEventType = {
   message: "message",

@@ -1,4 +1,4 @@
-const get = require("lodash/get");
+const get = require("lodash.get");
 const sha1 = require("./sha1");
 
 const SIGNATURE_PATTERN = /^sha1=(.*)/i;
